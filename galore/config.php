@@ -9,7 +9,7 @@
 $init = new galoreInit;
 $init->debug    = 0;
 $init->myServer = "";
-$init->myDB     = "";
+$init->myDB     = "galore";
 $init->myUser   = "";
 $init->myPass   = "";
 $init->myPollTable = "poll";
@@ -18,8 +18,8 @@ $init->myReviewcatsTable = "reviewCategories";
 $init->myUserTable = "users";
 $init->myGroupTable = "groups";
 
-$init->pathWebRoot  = "";
-$init->path     = "$DOCUMENT_ROOT/galore";
+$init->pathWebRoot  = "http://galore.berlios.de/dev/galore";
+$init->path     = "$DOCUMENT_ROOT/dev/galore";
 $init->pathImages = $init->pathWebRoot . "/images";
 $init->pathObjects = $init->path . "/objects";
 $init->pathAdmin = $init->path . "/admin";
@@ -104,8 +104,8 @@ class galoreInit {
         // Get number of rows in $result. 
         $num = mysql_numrows( $result ); 
         if ( $num != 0 ) { 
-            // A matching row was found - the user is authenticated. 
-            if ($this->permissions($PHP_AUTH_USER,$HTTP_GET_VARS['object']))
+          // A matching row was found - the user is authenticated. 
+          if ($this->permissions($PHP_AUTH_USER,$HTTP_GET_VARS['object']))
             $auth = true; 
         } 
     }
