@@ -9,9 +9,9 @@
 $init = new galoreInit;
 $init->debug    = 1;
 $init->myServer = "localhost";
-$init->myDB     = "phlyingpenguin_net";
-$init->myUser   = "csexton";
-$init->myPass   = "wiw01d";
+$init->myDB     = "";
+$init->myUser   = "";
+$init->myPass   = "";
 $init->myPollTable = "poll";
 $init->myReviewTable = "reviews";
 $init->myReviewcatsTable = "reviewCategories";
