@@ -7,16 +7,18 @@
 /****************************/
 
 $init = new galoreInit;
-$init->debug    = 1;
-$init->myServer = "localhost";
+$init->debug    = 0;
+$init->myServer = "";
 $init->myDB     = "";
 $init->myUser   = "";
 $init->myPass   = "";
 $init->myPollTable = "poll";
 $init->myReviewTable = "reviews";
 $init->myReviewcatsTable = "reviewCategories";
+$init->myUserTable = "users";
+$init->myGroupTable = "groups";
 
-$init->pathWebRoot  = "http://www.phlyingpenguin.net/galore";
+$init->pathWebRoot  = "";
 $init->path     = "$DOCUMENT_ROOT/galore";
 $init->pathImages = $init->pathWebRoot . "/images";
 $init->pathObjects = $init->path . "/objects";
@@ -55,7 +57,7 @@ class galoreInit {
   
   function myConnect () {
     $db=mysql_connect($this->myServer, $this->myUser, $this->myPass);
-    mysql_select_db($this->myDB,$db) or die("Error opening " . $this->myDB);
+    mysql_select_db($this->myDB,$db) or $this->error("sql");
     $this->newMsg("Server: " . $this->myServer);
     $this->newMsg("User: " . $this->myUser); 
     $pass = ("Password: ");
@@ -92,7 +94,7 @@ class galoreInit {
   }
   
   function checkAdmin() {
-    global $PHP_AUTH_USER, $PHP_AUTH_PW;
+    global $PHP_AUTH_USER, $PHP_AUTH_PW,$HTTP_GET_VARS;
     $auth = false; // Assume user is not authenticated 
     if (isset( $PHP_AUTH_USER ) && isset($PHP_AUTH_PW)) { 
         // Formulate the query 
@@ -103,6 +105,7 @@ class galoreInit {
         $num = mysql_numrows( $result ); 
         if ( $num != 0 ) { 
             // A matching row was found - the user is authenticated. 
+            if ($this->permissions($PHP_AUTH_USER,$HTTP_GET_VARS['object']))
             $auth = true; 
         } 
     }
@@ -113,6 +116,16 @@ class galoreInit {
         exit; 
     } else { 
         //echo '<P>You are authorized!</P>'; 
+    }
+  }
+
+  function permissions($user,$resource) {
+    $result=mysql_query("select * from " . $this->myGroupTable . " a left outer join " . $this->myUserTable . " b on a.group = b.usrGroup where usrName='$user' and a.permission='$resource';") or die("sql");
+    $row=mysql_fetch_array($result);
+    if ($row['permission'] = $resource) {
+      return true;
+    } else {
+       return false;
     }
   }
 }
