@@ -23,15 +23,16 @@ class reviews {
   function initAdmin() {
     // Start up the object
     global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
-    switch ($action) {
+    switch ($HTTP_GET_VARS['action']) {
       case "edit":
-        $this->_editReview();
+        $output .= $this->_editReview();
       case "new":
-        $this->_postReview();
+        $output .= $this->_postReview();
       default:
-        //$this->editList();
+        $output .= $this->_editList($HTTP_GET_VARS['category']);
     }
-    $init->printMsgs();
+    $output .= $init->printMsgs();
+    return $output;
   }
   
   function _indexReviews($category) {
@@ -46,15 +47,38 @@ class reviews {
     
     $result=mysql_query("SELECT * FROM " . $init->myReviewTable . " WHERE category=$category and page=1") or $init->error("sql");
     while ($row=mysql_fetch_array($result)) {
-      $output .= "Title: <a href=\"$PHP_SELF?category=$category&review=" . $row['title'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"". $row['image'] . "\"></a><br>";
+      $output .= "Title: <a href=\"$PHP_SELF?object=reviews&category=$category&review=" . $row['title'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"". $row['image'] . "\"></a><br>";
     }
     
     $result=mysql_query("SELECT * FROM " . $init->myReviewcatsTable . " WHERE parent=$category") or $init->error("sql");
     while ($row=mysql_fetch_array($result)) {
-      $output .= "Category: <a href=\"$PHP_SELF?category=" . $row['id'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"" . $row['image'] . "\"></a><br>";
+      $output .= "Category: <a href=\"$PHP_SELF?object=reviews&category=" . $row['id'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"" . $row['image'] . "\"></a><br>";
     }
     return $output;
   }
+
+  function _editList($category) {
+    // Display an index of reviews in a given category
+    // Default to showing a list of indexes to browse
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
+    if (strlen($this->category) > 0) {
+      $category = 0; 
+    } elseif (strlen($category) == 0) {
+      $category = 0;
+    }
+    
+    $result=mysql_query("SELECT * FROM " . $init->myReviewTable . " WHERE category=$category and page=1") or $init->error("sql");
+    while ($row=mysql_fetch_array($result)) {
+      $output .= "Title: <a href=\"$PHP_SELF?object=reviews&category=$category&review=" . $row['title'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"". $row['image'] . "\"></a><br>";
+    }
+    
+    $result=mysql_query("SELECT * FROM " . $init->myReviewcatsTable . " WHERE parent=$category") or $init->error("sql");
+    while ($row=mysql_fetch_array($result)) {
+      $output .= "Category: <a href=\"$PHP_SELF?object=reviews&category=" . $row['id'] . "\">" . $row['title'] . "<br><img border=\"0\" src=\"" . $row['image'] . "\"></a><br>";
+    }
+    return $output;
+  }
+
 
   function _postReview() {
     // Post a new review

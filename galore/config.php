@@ -7,16 +7,16 @@
 /****************************/
 
 $init = new galoreInit;
-$init->debug    = 0;
-$init->myServer = "db.berlios.de";
-$init->myDB     = "galore";
-$init->myUser   = "galore";
-$init->myPass   = "44199fc188a04ce3";
+$init->debug    = 1;
+$init->myServer = "localhost";
+$init->myDB     = "";
+$init->myUser   = "";
+$init->myPass   = "";
 $init->myPollTable = "poll";
 $init->myReviewTable = "reviews";
 $init->myReviewcatsTable = "reviewCategories";
 
-$init->pathWebRoot  = "http://galore.berlios.de/dev/galore";
+$init->pathWebRoot  = "http://www.phlyingpenguin.net/galore";
 $init->path     = "$DOCUMENT_ROOT/galore";
 $init->pathImages = $init->pathWebRoot . "/images";
 $init->pathObjects = $init->path . "/objects";
@@ -55,7 +55,7 @@ class galoreInit {
   
   function myConnect () {
     $db=mysql_connect($this->myServer, $this->myUser, $this->myPass);
-    mysql_select_db($this->myDB,$db) or $this->error("sql");
+    mysql_select_db($this->myDB,$db) or die("Error opening " . $this->myDB);
     $this->newMsg("Server: " . $this->myServer);
     $this->newMsg("User: " . $this->myUser); 
     $pass = ("Password: ");

@@ -19,7 +19,7 @@ class mainLoop {
       // We found an object variable
       $init->newMsg("Object: " . $HTTP_GET_VARS['object']);
       // Include the object file
-      require $init->pathObjects . "/" . $HTTP_GET_VARS['object'] . ".php"; 
+      include $init->pathObjects . "/" . $HTTP_GET_VARS['object'] . ".php";
       // Initialize the object - create an instance then run the 
       // object's init() function
       $object=new $HTTP_GET_VARS['object'];
