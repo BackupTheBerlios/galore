@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Coding Standards</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+
+<body>
+<table width="95%" border="0" cellpadding="0" cellspacing="4">
+  <tbody>
+    <tr> 
+      <td class="text"><p><strong>Coding Standards</strong></p>
+        <p>In order to keep the source code sane, a standard has to be followed 
+          in the coding practice.</p></td>
+    </tr>
+    <tr>
+      <td class="text"><p><strong>Note</strong></p>
+        <p>These standards are ripped directly from the Group Time project and are subject to change.
+        Soon I will update this with info on how to interface code into Galore and change a few of these
+        noted practices.</p>
+      </td>
+    </tr>
+    <tr> 
+      <td class="text"><ul>
+          <li>Files must be saved in Unix format and for indentation should be 
+            used 2 spaces (not TABs)</li>
+          <li>The start and end tags for PHP script must be: &lt;? ?&gt;</li>
+          <li>Define necessary constants before they are being called (ie, in 
+            include files)</li>
+          <li>All files, functions and classes should be commented so properly 
+            that even the developer, who is not familiar with the code, can easily 
+            understand.</li>
+          <li>All variables should be called within their superglobals format 
+            ($_POST, $_GET, $_SESSIONS, $_SERVER etc).</li>
+          <li>Use include(), include_once(), require() and require_once() where 
+            appropriate: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr> 
+                  <td class="text"> require('file.php');<br />
+                    <br />
+                    if (condition) {<br />   include('file_true.php');<br />
+                    } else {<br />   doSomething();<br />
+                    }<br /> </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>Instances of objects should be called as: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">new ClassName;</td>
+                </tr>
+              </tbody>
+            </table>
+            and not: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">new ClassName();</td>
+                </tr>
+              </tbody>
+            </table>
+            When parameters are passed, then use: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">new ClassName($parameter1);</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>To echo out a string, use: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">echo $variable;</td>
+                </tr>
+              </tbody>
+            </table>
+            and not: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">print $variable;</td>
+                </tr>
+                <tr>
+                  <td class="text">&lt;?=$variable;?&gt;</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>All the custom function names must begin with lowercase word and 
+            if theres another word, must have the first letter capitalized: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr> 
+                  <td class="text"> function myFunction($parameter, $optional 
+                    = '') {<br />   global $HTTP_GET_VARS, $another_variable;<br /> 
+                      &lt;function code&gt;<br />   return true;<br />
+                    } </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>Class names should match its lower-cased file-based name: myclass.php. 
+            Classnames should be declared with the words first letters capitalized. 
+            The method names must begin with lowercase word and if theres another 
+            word, must have the first letter capitalized ( (get(), doSomething(), 
+            getName(), etc.) 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">class MyClassName {<br />   var $variable;<br /> 
+                      // class constuctor<br />   function myClassName() {<br /> 
+                        &lt;method code&gt;<br />     return true;<br />   }<br />
+                    <br />   // class methods<br />   function doSomething() {<br /> 
+                        $this-&gt;variable = 'set';<br />     return true;<br /> 
+                      }<br />
+                    }<br />
+                    <br />
+                    $class = new MyClass;<br />
+                    $class-&gt;doSomething()</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>Database queries should be done in this format, where all the SQL 
+            keywords are uppercases: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr> 
+                  <td class="text"> $actionQuery = dbQuery("SELECT column1, ... 
+                    FROM table WHERE ...");<br />
+                    while ($action = dbFetchArray($actionQuery)) {<br />   echo 
+                    $action['column1'];<br />
+                    } </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>All functions should return strings and not do any direct echoing, 
+            for example: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr> 
+                  <td class="text"> function myFunction($string) {<br />   return 
+                    $string;<br />
+                    } </td>
+                </tr>
+              </tbody>
+            </table>
+            and not: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr> 
+                  <td class="text"> function myFunction($string) {<br />   echo 
+                    $string;<br />
+                    }<br /> </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>Simple boolean expressions can be written as: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text">$string = ($condition) ? 'true' : 'false';</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+          <li>IF statements with more than 3 conditions should use SWITCH/CASE: 
+            <table cellpadding="4" cellspacing="0" width="95%" border="0" bgcolor="#f3f3f3">
+              <tbody>
+                <tr>
+                  <td class="text"> switch ($string) {<br />   case '1':<br /> 
+                        doSomething('1');<br />     break;<br />   case '2':<br /> 
+                        doSomething('2');<br />     break;<br />   case '3':<br /> 
+                        doSomething('3');<br />     break;<br />   default:<br /> 
+                        doSomething('default');<br />     break;<br />
+                    }</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
