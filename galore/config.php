@@ -8,15 +8,15 @@
 
 $init = new galoreInit;
 $init->debug    = 0;
-$init->myServer = "";
-$init->myDB     = "";
-$init->myUser   = "";
-$init->myPass   = "";
+$init->myServer = "db.berlios.de";
+$init->myDB     = "galore";
+$init->myUser   = "galore";
+$init->myPass   = "44199fc188a04ce3";
 $init->myPollTable = "poll";
 $init->myReviewTable = "reviews";
 $init->myReviewcatsTable = "reviewCategories";
 
-$init->pathWebRoot  = "http://galore.berlios.de/galore";
+$init->pathWebRoot  = "http://galore.berlios.de/dev/galore";
 $init->path     = "$DOCUMENT_ROOT/galore";
 $init->pathImages = $init->pathWebRoot . "/images";
 $init->pathObjects = $init->path . "/objects";
