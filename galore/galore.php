@@ -11,18 +11,18 @@ class mainLoop {
   // Fires everything off
   function callObject() {
     // Includes the object file and then runs the init() function
-    global $init;
-    if (strlen($_GET['object']) <= 0) { 
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
+    if (strlen($HTTP_GET_VARS['object']) <= 0) { 
       // There is no ?object= variable passed
       $init->newMsg("Object: No object"); 
     } else { 
       // We found an object variable
-      $init->newMsg("Object: " . $_GET['object']);
+      $init->newMsg("Object: " . $HTTP_GET_VARS['object']);
       // Include the object file
-      require $init->pathObjects . "/" . $_GET['object'] . ".php"; 
+      require $init->pathObjects . "/" . $HTTP_GET_VARS['object'] . ".php"; 
       // Initialize the object - create an instance then run the 
       // object's init() function
-      $object=new $_GET['object'];
+      $object=new $HTTP_GET_VARS['object'];
       $output .= $object->init();
       $output .= $init->newMsg("Finished executing objects");
       $output .= $init->printMsgs();

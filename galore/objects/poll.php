@@ -7,37 +7,37 @@
 /*  that runs the Galore poll   */
 /*                              */
 /*  TODO:                       */
-/*   *Change _REQUEST to _POST  */
+/*   *Change HTTP_GET_VARS to _POST  */
 /*   *Add Admin functions       */
 /********************************/
 
 class poll {
   function init() {
     // Start up the object
-    global $init;
-    if ($_GET['clrck'] == 1)
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
+    if ($HTTP_GET_VARS['clrck'] == 1)
       $output .= $this->_clearCookie();
     // Is this a valid vote request?
-    if (strlen($_REQUEST['vote']) > 0 && strlen($_REQUEST['pid']) > 0)
-      $output .= $this->_vote($_REQUEST['pid'], $_REQUEST['vote']);
+    if (strlen($HTTP_GET_VARS['vote']) > 0 && strlen($HTTP_GET_VARS['pid']) > 0)
+      $output .= $this->_vote($HTTP_GET_VARS['pid'], $HTTP_GET_VARS['vote']);
     $output .= $init->printMsgs();
     return $output;
   }
 
   function initAdmin() {
     // Start up the object
-    global $init;
-    if ($_GET['clrck'] == 1)
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
+    if ($HTTP_GET_VARS['clrck'] == 1)
       $output .= $this->_clearCookie();
     // Is this a valid vote request?
-    $init->newMsg("PID: " . $_REQUEST['pid']);
-    $init->newMsg("strlen(pid): " . strlen($_REQUEST['pid'])); 
-    if (strlen($_REQUEST['pid']) > 0 && strlen($_REQUEST['answer']) > 0) {
-      $output .= $this->_editAnswer($_REQUEST['pid'], $_REQUEST['answer']);
-    } elseif (strlen($_REQUEST['pid']) > 0) {
-      $output .= $this->_editPoll($_REQUEST['pid']);
+    $init->newMsg("PID: " . $HTTP_GET_VARS['pid']);
+    $init->newMsg("strlen(pid): " . strlen($HTTP_GET_VARS['pid'])); 
+    if (strlen($HTTP_GET_VARS['pid']) > 0 && strlen($HTTP_GET_VARS['answer']) > 0) {
+      $output .= $this->_editAnswer($HTTP_GET_VARS['pid'], $HTTP_GET_VARS['answer']);
+    } elseif (strlen($HTTP_GET_VARS['pid']) > 0) {
+      $output .= $this->_editPoll($HTTP_GET_VARS['pid']);
     } else {
-      $this->_listPolls();
+      $output .= $this->_listPolls();
     }
     $output .= $init->printMsgs();
     return $output;
@@ -45,7 +45,7 @@ class poll {
 
   function _vote($poll,$vote) {
     // vote on a given poll
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     if ($_COOKIE['voted'] == "true$poll") {
       $vote="null";
       $init->newMsg("vote: $vote");
@@ -77,7 +77,7 @@ class poll {
   
   function _clearCookie() {
     // Clear the cookie - development purposes only!
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     if ($init->debug != 1)
       setcookie ("voted");
     $output .= "<li>Cookie cleared";
@@ -87,10 +87,9 @@ class poll {
   
   function _getResults($poll) {
     // Get results of a given poll
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     $init->newMsg("Poll Table: " . $init->myPollTable);
     $result=mysql_query("SELECT * FROM " . $init->myPollTable . " WHERE question='$poll'") or $init->error("sql");
-    echo $result;
     $init->newMsg("<b>Called mysql3</b>");
     // Grab the answer and number of votes for the question
     while ($row=mysql_fetch_array($result)) {
@@ -123,13 +122,13 @@ class poll {
   
   function _editPoll($poll) {
     // Edit poll questions
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     $init->newMsg("Currently in _editPoll()");
     
-    if (strlen($_POST['new']) > 0) {
-      mysql_query("INSERT INTO " . $init->myPollTable . " (question,answer) VALUES ('$poll','" . $_POST['new'] . "');") or $init->error("sql");
+    if (strlen($HTTP_POST_VARS['new']) > 0) {
+      mysql_query("INSERT INTO " . $init->myPollTable . " (question,answer) VALUES ('$poll','" . $HTTP_POST_VARS['new'] . "');") or $init->error("sql");
       $init->newMsg("<b>Called mysql4</b>");
-      $init->newMsg("Created new answer: " . $_POST['new']);
+      $init->newMsg("Created new answer: " . $HTTP_POST_VARS['new']);
     }
     
     $output .= "<p><b>$poll</b></p>";
@@ -149,12 +148,12 @@ class poll {
   
   function _editAnswer($poll, $answer) {
     // Edit/Delete an answer on a poll
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     $init->newMsg("_editAnswer started for $poll -> $answer");
-    $init->newMsg("Action: " . $_REQUEST['action']);
-    switch ($_REQUEST['action']) {
+    $init->newMsg("Action: " . $HTTP_GET_VARS['action']);
+    switch ($HTTP_GET_VARS['action']) {
     case ("edit"):
-      mysql_query("UPDATE " . $init->myPollTable . " SET answer='" . $_POST['answerNew'] . "' WHERE answer='$answer';");
+      mysql_query("UPDATE " . $init->myPollTable . " SET answer='" . $HTTP_POST_VARS['answerNew'] . "' WHERE answer='$answer';");
       $init->newMsg("<b>Called mysql6</b>");
       $init->newMsg("Updated");
       $this->_editPoll($poll);
@@ -192,7 +191,7 @@ class poll {
   
   function _listPolls() {
     // List polls for admin editing
-    global $init;
+    global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     $output .= "<p><b>Edit poll:</b></p>";
     $result=mysql_query("SELECT DISTINCT question FROM " . $init->myPollTable . ";");
     $init->newMsg("<b>Called mysql8</b>");
