@@ -7,8 +7,9 @@
 
 require "config.php";
 
-require $init->pathObjects . "/reviews.php";
-$object=new reviews;
+require $init->pathObjects . "/theme.php";
+$object=new theme;
+$object->object = "reviews";
 echo $object->init();
 
 ?>
