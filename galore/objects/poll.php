@@ -193,7 +193,7 @@ class poll {
     // List polls for admin editing
     global $init,$HTTP_GET_VARS,$HTTP_POST_VARS;
     $output .= "<p><b>Edit poll:</b></p>";
-    $result=mysql_query("SELECT DISTINCT question FROM " . $init->myPollTable . ";");
+    $result=mysql_query("SELECT DISTINCT question FROM " . $init->myPollTable . ";") or $init->newMsg("sql");
     $init->newMsg("<b>Called mysql8</b>");
     while ($row=mysql_fetch_array($result)) {
       $output .= "<a href=\"" . $init->pathWebRoot . "/admin.php?object=poll&pid=" . urlencode($row['question']) . "\">" . $row['question'] . "</a><br>";

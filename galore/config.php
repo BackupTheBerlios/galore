@@ -8,18 +8,18 @@
 
 $init = new galoreInit;
 $init->debug    = 0;
-$init->myServer = "";
+$init->myServer = "localhost";
 $init->myDB     = "galore";
 $init->myUser   = "";
 $init->myPass   = "";
-$init->myPollTable = "poll";
-$init->myReviewTable = "reviews";
-$init->myReviewcatsTable = "reviewCategories";
-$init->myUserTable = "users";
-$init->myGroupTable = "groups";
+$init->myPollTable = "g_poll";
+$init->myReviewTable = "g_reviews";
+$init->myReviewcatsTable = "g_reviewCategories";
+$init->myUserTable = "g_users";
+$init->myGroupTable = "g_groups";
 
-$init->pathWebRoot  = "http://galore.berlios.de/dev/galore";
-$init->path     = "$DOCUMENT_ROOT/dev/galore";
+$init->pathWebRoot  = "http://www.yoursite.com/galore";
+$init->path     = "$DOCUMENT_ROOT/galore";
 $init->pathImages = $init->pathWebRoot . "/images";
 $init->pathObjects = $init->path . "/objects";
 $init->pathAdmin = $init->path . "/admin";
@@ -28,6 +28,11 @@ $init->pathf2admin = "$DOCUMENT_ROOT/f2admin.php";
 
 $init->pdbInc = $init->path . "/include/php-pdb.inc";
 $init->pdbDoc = $init->path . "/include/modules/doc.inc";
+
+if (file_exists($init->path . "/local.php")) {
+	$init->newMsg("Included: " . $init->path . "/local.php");
+	include($init->path . "/local.php");
+}
 
 echo $init->mainLoop();
 
@@ -120,7 +125,7 @@ class galoreInit {
   }
 
   function permissions($user,$resource) {
-    $result=mysql_query("select * from " . $this->myGroupTable . " a left outer join " . $this->myUserTable . " b on a.group = b.usrGroup where usrName='$user' and a.permission='$resource';") or die("sql");
+    $result=mysql_query("select * from " . $this->myGroupTable . " a left outer join " . $this->myUserTable . " b on a.group = b.usrGroup where usrName='$user' and a.permission='$resource';") or $this->error("sql");
     $row=mysql_fetch_array($result);
     if ($row['permission'] = $resource) {
       return true;
